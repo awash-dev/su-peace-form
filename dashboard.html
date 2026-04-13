@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
   <title>Admin Dashboard — Samara Peace Forum Union</title>
   <script>
     try {
@@ -37,9 +38,10 @@
       <div class="dash-sidebar__brand">
         <img src="/logo.jpg" alt="Logo" class="dash-sidebar__logo">
         <div>
-          <div class="dash-sidebar__brand-name">Peace Forum</div>
+          <div class="dash-sidebar__brand-name">Peace Forum Union</div>
           <div class="dash-sidebar__brand-sub">Admin Panel</div>
         </div>
+        <button class="dash-sidebar__close" id="dash-close-btn" aria-label="Close sidebar">✕</button>
       </div>
 
       <nav class="dash-nav">
@@ -65,7 +67,10 @@
       <button class="dash-topbar__menu" id="dash-menu-btn">☰</button>
       <div class="dash-topbar__brand">
         <img src="/logo.jpg" alt="Logo" width="28" height="28" style="border-radius:6px">
-        <span>Peace Forum Admin</span>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <span style="font-weight:800;font-size:0.875rem;line-height:1">Peace Forum</span>
+          <span style="font-size:0.625rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.04em">Admin Panel</span>
+        </div>
       </div>
     </div>
 
@@ -78,7 +83,7 @@
           <h1 class="dash-header__title" id="dash-page-title">📰 News Management</h1>
           <p class="dash-header__sub">Manage posts published to the public site</p>
         </div>
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <div class="dash-header__actions">
           <a href="/" class="d-btn d-btn--ghost">← View Site</a>
           <a href="/api/export/members" target="_blank" class="d-btn d-btn--outline">📥 Export CSV</a>
         </div>
@@ -444,9 +449,27 @@
         box-shadow:8px 0 40px rgba(0,0,0,0.3);
       }
       .dash-topbar { display:flex; }
-      .dash-main { margin-left:0; padding:1rem; padding-top:calc(56px + 1rem); }
+      .dash-main { margin-left:0; padding:1.25rem; padding-top:calc(56px + 1.25rem); }
       .d-form-grid { grid-template-columns:1fr; }
+      
+      .dash-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+      .dash-header__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; width: 100%; }
+      .dash-header__actions .d-btn { width: 100%; font-size: 0.75rem; padding-inline: 0.5rem; }
+      
+      .dash-sidebar__close {
+        display: flex; align-items: center; justify-content: center;
+        width: 32px; height: 32px; border-radius: 8px;
+        background: var(--bg-muted); border: none; font-size: 1.125rem;
+        cursor: pointer; margin-left: auto; color: var(--text-secondary);
+      }
     }
+    
+    @media (max-width: 480px) {
+      .dash-header__actions { grid-template-columns: 1fr; }
+    }
+    
+    .dash-sidebar__close { display: none; }
+    .dash-header__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
     /* ── OVERLAY for mobile sidebar ─────────── */
     .dash-overlay {

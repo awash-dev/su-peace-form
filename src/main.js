@@ -107,8 +107,19 @@ function initNavbar() {
           <button class="navbar__menu-btn" id="menu-btn" aria-label="Toggle menu" aria-expanded="false">☰</button>
         </div>
       </div>
+      </div>
     </div>
-    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true">
+  `;
+
+  // Extract mobile menu out of the fixed navbar to avoid structural scaling issues
+  let menu = document.getElementById('mobile-menu');
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.className = 'mobile-menu';
+    menu.id = 'mobile-menu';
+    menu.setAttribute('role', 'dialog');
+    menu.setAttribute('aria-modal', 'true');
+    menu.innerHTML = `
       <div class="mobile-menu__inner">
         ${links.map(l => `<a href="${l.href}" class="mobile-menu__link">${l.label}</a>`).join('')}
         <div class="mobile-menu__divider"></div>
@@ -118,11 +129,11 @@ function initNavbar() {
         </button>
         <a href="https://t.me/SUPEACEFORUMUNION" target="_blank" rel="noopener noreferrer" class="mobile-menu__social-btn">🔵 Join Telegram</a>
       </div>
-    </div>
-  `;
+    `;
+    document.body.appendChild(menu);
+  }
 
   const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('mobile-menu');
   const themeToggle = document.getElementById('theme-toggle');
   const themeToggleMobile = document.getElementById('theme-toggle-mobile');
 
@@ -137,51 +148,58 @@ function initNavbar() {
   themeToggleMobile?.addEventListener('click', toggleTheme);
 
   btn?.addEventListener('click', () => {
-    const open = menu.classList.toggle('is-open');
-    navbar.classList.toggle('menu-is-open', open);
-    btn.textContent = open ? '✕' : '☰';
-    btn.setAttribute('aria-expanded', open);
-    btn.style.zIndex = open ? '2200' : '';
-    document.body.style.overflow = open ? 'hidden' : '';
-    
-    // Fix: Remove transform when open to prevent containing block issue
-    if (open) {
-      navbar.style.transform = 'none';
-    } else {
-      navbar.style.transform = 'translateY(0)';
-    }
+    menu.classList.toggle('is-open');
+    navbar?.classList.toggle('menu-is-open', menu.classList.contains('is-open'));
+    btn.textContent = menu.classList.contains('is-open') ? '✕' : '☰';
+    btn.setAttribute('aria-expanded', menu.classList.contains('is-open'));
+    btn.style.zIndex = menu.classList.contains('is-open') ? '2200' : '';
+    document.body.style.overflow = menu.classList.contains('is-open') ? 'hidden' : '';
   });
+
   menu?.addEventListener('click', (e) => {
     if (e.target === menu) {
       menu.classList.remove('is-open');
-      navbar.classList.remove('menu-is-open');
-      btn.textContent = '☰';
-      btn.setAttribute('aria-expanded', false);
-      btn.style.zIndex = '';
-      navbar.style.transform = 'translateY(0)';
+      navbar?.classList.remove('menu-is-open');
+      if (btn) {
+        btn.textContent = '☰';
+        btn.setAttribute('aria-expanded', false);
+        btn.style.zIndex = '';
+      }
       document.body.style.overflow = '';
     }
   });
+
   menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     menu.classList.remove('is-open');
-    navbar.classList.remove('menu-is-open');
-    btn.textContent = '☰';
-    btn.style.zIndex = '';
-    navbar.style.transform = 'translateY(0)';
+    navbar?.classList.remove('menu-is-open');
+    if (btn) {
+      btn.textContent = '☰';
+      btn.setAttribute('aria-expanded', false);
+      btn.style.zIndex = '';
+    }
     document.body.style.overflow = '';
   }));
 
   // Scroll shrink
   let lastY = 0;
   window.addEventListener('scroll', () => {
-    if (navbar.classList.contains('menu-is-open')) return;
+    if (!navbar || navbar.classList.contains('menu-is-open')) return;
     const y = window.scrollY;
     const scrolled = y > 30;
     navbar.classList.toggle('navbar--scrolled', scrolled);
-    // Hide on scroll down, show on scroll up
-    navbar.style.transform = y > lastY && y > 200 ? 'translateY(-100%)' : 'translateY(0)';
+
+    // Hide on scroll down, show on scroll up (for cleaner reading)
+    if (y > 400) {
+      if (y > lastY) {
+        navbar.style.transform = 'translateY(-100%)';
+      } else {
+        navbar.style.transform = 'translateY(0)';
+      }
+    } else {
+      navbar.style.transform = 'translateY(0)';
+    }
     lastY = y;
-  }, { passive: true });
+  });
 }
 
 /* ─── Footer ────────────────────────────────────────────────── */
@@ -639,9 +657,12 @@ async function initDashboardPage() {
 
   // Mobile sidebar
   const menuBtn = document.getElementById('dash-menu-btn');
+  const closeBtn = document.getElementById('dash-close-btn');
   const sidebar = document.getElementById('dash-sidebar');
   const overlay = document.getElementById('dash-overlay');
-  menuBtn?.addEventListener('click', () => { sidebar.classList.toggle('is-open'); overlay.classList.toggle('is-visible'); });
+
+  menuBtn?.addEventListener('click', () => { sidebar?.classList.toggle('is-open'); overlay?.classList.toggle('is-visible'); });
+  closeBtn?.addEventListener('click', closeSidebar);
   overlay?.addEventListener('click', closeSidebar);
   function closeSidebar() { sidebar?.classList.remove('is-open'); overlay?.classList.remove('is-visible'); }
 
