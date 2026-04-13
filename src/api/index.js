@@ -3,7 +3,7 @@
  * All backend communication goes through this module
  */
 
-const API_BASE = ''; // Relative path for flat structure with proxy or direct API
+const API_BASE = 'https://su-peace-form-backend.vercel.app'; // Live Vercel Production Environment backend url
 
 /** @type {Map<string, {data: any, ts: number}>} */
 const cache = new Map();

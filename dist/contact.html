@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact the Samara University Peace Forum Union with your questions, partnership proposals, and institutional communications." />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Contact Us — Samara Peace Forum Union</title>
+  <script>
+    try {
+      const t = localStorage.getItem('spf-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  </script>
+  <script type="module" crossorigin src="/assets/main-BQmGqmUH.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-BgYjWuA3.css">
+</head>
+<body data-page="contact">
+
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <div class="preloader__spinner">
+        <img src="/logo.jpg" alt="" class="preloader__logo" />
+        <div class="preloader__ring preloader__ring--outer"></div>
+        <div class="preloader__ring preloader__ring--inner"></div>
+      </div>
+      <p class="preloader__text">Loading…</p>
+    </div>
+  </div>
+
+  <div id="page-progress" class="page-progress" aria-hidden="true"></div>
+  <header id="navbar" class="navbar" role="banner"></header>
+
+  <main>
+    <div class="page-hero">
+      <div class="container">
+        <p class="page-hero__eyebrow" data-motion="slideDown" data-motion-duration="0.55">📬 Contact</p>
+        <h1 class="page-hero__title" data-motion="slideUp" data-motion-delay="0.12" data-motion-duration="0.95">Get In Touch</h1>
+        <p class="page-hero__desc" data-motion="blurRight" data-motion-delay="0.24" data-motion-duration="0.85">
+          Use your official Samara University email to reach us directly.
+          We respond to all institutional communications within 48 hours.
+        </p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid-split" style="max-width:1100px;margin:0 auto">
+
+          <!-- Contact info sidebar -->
+          <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+          <div data-motion="slideRight" data-motion-stagger="0.12" data-motion-duration="0.75" style="display:flex;flex-direction:column;gap:var(--sp-4)">
+              <a href="mailto:su.peaceforumunion@gmail.com" class="contact-info-card" style="text-decoration:none">
+                <span class="contact-info-card__icon">📧</span>
+                <div>
+                  <p class="contact-info-card__label">Email</p>
+                  <p class="contact-info-card__value">su.peaceforumunion@gmail.com</p>
+                </div>
+              </a>
+              <a href="https://t.me/SUPEACEFORUMUNION" target="_blank" rel="noopener noreferrer"
+                 class="contact-info-card" style="text-decoration:none">
+                <span class="contact-info-card__icon">💬</span>
+                <div>
+                  <p class="contact-info-card__label">Telegram</p>
+                  <p class="contact-info-card__value">@SUPEACEFORUMUNION</p>
+                </div>
+              </a>
+              <div class="contact-info-card">
+                <span class="contact-info-card__icon">📍</span>
+                <div>
+                  <p class="contact-info-card__label">Location</p>
+                  <p class="contact-info-card__value">Samara University, Afar Region, Ethiopia</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Map -->
+            <div class="map-container" data-motion="flipX" data-motion-delay="0.2" data-motion-duration="0.9">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d205.6359228207346!2d40.992129628378244!3d11.800678104352816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2set!4v1776083151597!5m2!1sen!2set"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade" title="Samara University Map">
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Contact form -->
+          <div class="form-card" data-motion="slideLeft" data-motion-delay="0.12" data-motion-duration="0.9">
+            <h2 class="form-card__title">
+              <span class="form-card__icon">✉️</span>
+              Send a Message
+            </h2>
+
+            <form id="contact-form" novalidate>
+              <div class="contact-form-grid">
+
+                <!-- Row 1: Name + Email -->
+                <div class="field">
+                  <label class="field__label" for="name">Full Name <span class="required">*</span></label>
+                  <input class="field__input" type="text" id="name" name="name"
+                         placeholder="e.g. Abebe Girma" autocomplete="name" required />
+                </div>
+                <div class="field">
+                  <label class="field__label" for="email">Institutional Email <span class="required">*</span></label>
+                  <input class="field__input" type="email" id="email" name="email"
+                         placeholder="you@su.edu.et" autocomplete="email" required />
+                  <p class="field__hint">Must be an official @su.edu.et or @samu.edu.et address.</p>
+                </div>
+
+                <!-- Row 2: Topic (full width) -->
+                <div class="field contact-form-grid__full">
+                  <label class="field__label" for="category">Topic</label>
+                  <select class="field__input" id="category" name="category">
+                    <option value="General">General Inquiry</option>
+                    <option value="Partnership">Partnership Proposal</option>
+                    <option value="Membership">Membership &amp; Registration</option>
+                    <option value="Media">Media &amp; Press</option>
+                    <option value="Events">Events &amp; Programs</option>
+                    <option value="Research">Research &amp; Publications</option>
+                  </select>
+                </div>
+
+                <!-- Row 3: Message (full width) -->
+                <div class="field contact-form-grid__full">
+                  <label class="field__label" for="message">Message <span class="required">*</span></label>
+                  <textarea class="field__input" id="message" name="message"
+                            placeholder="Write your message here…" rows="6" required></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div class="contact-form-grid__full">
+                  <button type="submit" class="btn btn--primary btn--full btn--lg" id="contact-submit">
+                    📤 Send Message
+                  </button>
+                </div>
+
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="footer" role="contentinfo"></footer>
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+</body>
+</html>
