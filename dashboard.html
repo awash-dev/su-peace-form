@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Admin dashboard for the Samara Peace Forum Union — manage news, members, and categories." />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <title>Admin Dashboard — Samara Peace Forum Union</title>
+  <script>
+    try {
+      const t = localStorage.getItem('spf-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  </script>
+</head>
+<body data-page="dashboard" style="margin:0;padding:0;font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);overflow-x:hidden">
+
+  <!-- Preloader -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <img src="/logo.jpg" alt="" class="preloader__logo" />
+      <div class="preloader__ring preloader__ring--outer"></div>
+      <div class="preloader__ring preloader__ring--inner"></div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <div class="dash-layout">
+
+    <!-- ── SIDEBAR ──────────────────────────── -->
+    <aside class="dash-sidebar" id="dash-sidebar">
+      <div class="dash-sidebar__brand">
+        <img src="/logo.jpg" alt="Logo" class="dash-sidebar__logo">
+        <div>
+          <div class="dash-sidebar__brand-name">Peace Forum</div>
+          <div class="dash-sidebar__brand-sub">Admin Panel</div>
+        </div>
+      </div>
+
+      <nav class="dash-nav">
+        <button class="dash-nav__item is-active" data-tab="news" aria-selected="true">
+          <span class="dash-nav__icon">📰</span> News
+        </button>
+        <button class="dash-nav__item" data-tab="members" aria-selected="false">
+          <span class="dash-nav__icon">👥</span> Members
+        </button>
+        <button class="dash-nav__item" data-tab="categories" aria-selected="false">
+          <span class="dash-nav__icon">🏷</span> Chapters
+        </button>
+      </nav>
+
+      <div class="dash-sidebar__footer">
+        <a href="/" class="dash-sidebar__link">🌐 View Site</a>
+        <a href="/api/export/members" target="_blank" class="dash-sidebar__link">📥 Export CSV</a>
+      </div>
+    </aside>
+
+    <!-- ── MOBILE TOPBAR ────────────────────── -->
+    <div class="dash-topbar">
+      <button class="dash-topbar__menu" id="dash-menu-btn">☰</button>
+      <div class="dash-topbar__brand">
+        <img src="/logo.jpg" alt="Logo" width="28" height="28" style="border-radius:6px">
+        <span>Peace Forum Admin</span>
+      </div>
+    </div>
+
+    <!-- ── MAIN CONTENT ──────────────────────── -->
+    <main class="dash-main">
+
+      <!-- Dashboard header -->
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-header__title" id="dash-page-title">📰 News Management</h1>
+          <p class="dash-header__sub">Manage posts published to the public site</p>
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+          <a href="/" class="d-btn d-btn--ghost">← View Site</a>
+          <a href="/api/export/members" target="_blank" class="d-btn d-btn--outline">📥 Export CSV</a>
+        </div>
+      </div>
+
+      <!-- ─── NEWS PANEL ───────────────────── -->
+      <div class="dash-panel is-active" id="news-panel">
+        <div class="dash-two-col">
+
+          <!-- Publish form -->
+          <div class="d-card">
+            <div class="d-card__header">
+              <span class="d-card__icon">📤</span>
+              <h2 class="d-card__title" id="news-form-heading">Publish New Story</h2>
+              <button id="news-cancel" class="d-btn d-btn--sm d-btn--ghost is-hidden" style="margin-left:auto">✕ Cancel</button>
+            </div>
+            <form id="news-form" novalidate>
+              <div class="d-form-grid">
+                <div class="d-field full">
+                  <label class="d-label" for="news-title">Headline <span class="d-req">*</span></label>
+                  <input class="d-input" type="text" id="news-title" name="title"
+                         placeholder="e.g. Forum Hosts Regional Peace Summit" required />
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="news-author">Author <span class="d-req">*</span></label>
+                  <input class="d-input" type="text" id="news-author" name="author"
+                         placeholder="Contributor name" required />
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="news-category">Category</label>
+                  <select class="d-input" id="news-category" name="category">
+                    <option value="General">General</option>
+                  </select>
+                </div>
+                <div class="d-field full">
+                  <label class="d-label" for="news-content">Content <span class="d-req">*</span></label>
+                  <textarea class="d-input" id="news-content" name="content"
+                            placeholder="Full story text…" rows="6" required></textarea>
+                </div>
+                <div class="d-field full">
+                  <label class="d-label">Cover Image</label>
+                  <label class="d-file-label" id="news-file-label-wrap" for="news-image">
+                    🖼 <span id="news-file-label">Attach Image</span>
+                  </label>
+                  <input class="d-file-input" type="file" id="news-image" name="image" accept="image/*" />
+                </div>
+                <div class="d-field full">
+                  <button type="submit" class="d-btn d-btn--primary d-btn--full">📤 Publish to Site</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- News table -->
+          <div class="d-card">
+            <div class="d-card__header">
+              <span class="d-card__icon">📋</span>
+              <h2 class="d-card__title">Published Stories</h2>
+            </div>
+            <div class="d-table-wrap">
+              <table class="d-table">
+                <thead>
+                  <tr>
+                    <th>Story</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="news-tbody">
+                  <tr><td colspan="5" class="d-table__empty">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── MEMBERS PANEL ────────────────── -->
+      <div class="dash-panel" id="members-panel">
+        <div class="dash-two-col">
+
+          <!-- Add member form -->
+          <div class="d-card">
+            <div class="d-card__header">
+              <span class="d-card__icon">➕</span>
+              <h2 class="d-card__title">Register New Member</h2>
+              <button id="member-cancel" class="d-btn d-btn--sm d-btn--ghost is-hidden" style="margin-left:auto">✕ Cancel</button>
+            </div>
+            <form id="add-member-form" novalidate>
+              <div class="d-form-grid">
+                <div class="d-field">
+                  <label class="d-label" for="add-m-name">Full Name <span class="d-req">*</span></label>
+                  <input class="d-input" type="text" id="add-m-name" placeholder="Student's full name" required />
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="add-m-email">Institutional Email <span class="d-req">*</span></label>
+                  <input class="d-input" type="email" id="add-m-email" placeholder="student@su.edu.et" required />
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="add-m-phone">Phone</label>
+                  <input class="d-input" type="tel" id="add-m-phone" placeholder="+251 9XX XXX XXXX" />
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="add-m-category">Chapter <span class="d-req">*</span></label>
+                  <select class="d-input" id="add-m-category" required>
+                    <option value="">Select chapter…</option>
+                  </select>
+                </div>
+                <div class="d-field">
+                  <label class="d-label" for="add-m-grade">Academic Year</label>
+                  <select class="d-input" id="add-m-grade">
+                    <option>Freshman</option>
+                    <option>Sophomore</option>
+                    <option>Junior</option>
+                    <option>Senior</option>
+                    <option>Graduate</option>
+                  </select>
+                </div>
+                <div class="d-field">
+                  <label class="d-label">Student Photo</label>
+                  <label class="d-file-label" id="add-m-file-label-wrap" for="add-m-image">📸 <span id="add-m-file-label" data-default="Student Photo">Student Photo</span></label>
+                  <input class="d-file-input" type="file" id="add-m-image" accept="image/*" />
+                </div>
+                <div class="d-field">
+                  <label class="d-label">Student ID</label>
+                  <label class="d-file-label" id="add-m-id-label-wrap" for="add-m-id">🪪 <span id="add-m-id-label" data-default="ID Scan">ID Scan</span></label>
+                  <input class="d-file-input" type="file" id="add-m-id" accept="image/*,.pdf" />
+                </div>
+                <div class="d-field full">
+                  <button type="submit" class="d-btn d-btn--primary d-btn--full">➕ Add to Registry</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Members table -->
+          <div class="d-card">
+            <div class="d-card__header">
+              <span class="d-card__icon">📋</span>
+              <h2 class="d-card__title">Registered Members</h2>
+            </div>
+            <div class="d-table-wrap">
+              <table class="d-table">
+                <thead>
+                  <tr>
+                    <th>Member</th>
+                    <th>Chapter</th>
+                    <th>Year</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="members-tbody">
+                  <tr><td colspan="5" class="d-table__empty">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CHAPTERS PANEL ───────────────── -->
+      <div class="dash-panel" id="categories-panel">
+        <div style="max-width:640px">
+          <div class="d-card" style="margin-bottom:1.5rem">
+            <div class="d-card__header">
+              <span class="d-card__icon">🏷</span>
+              <h2 class="d-card__title">Create New Chapter</h2>
+            </div>
+            <form id="create-cat-form">
+              <div style="display:flex;gap:0.75rem">
+                <input class="d-input" type="text" id="cat-input" placeholder="Chapter name (e.g. Law & Justice)" required style="flex:1" />
+                <button type="submit" class="d-btn d-btn--primary">➕ Add</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="d-card">
+            <div class="d-card__header">
+              <span class="d-card__icon">📂</span>
+              <h2 class="d-card__title">All Chapters</h2>
+            </div>
+            <div id="cat-list" class="cat-list">
+              <p style="color:#94a3b8">Loading chapters…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <style>
+    /* ── SIDEBAR LAYOUT ──────────────────── */
+    .dash-layout { display:flex; min-height:100vh; }
+
+    .dash-sidebar {
+      width:240px; flex-shrink:0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display:flex; flex-direction:column;
+      position:fixed; top:0; left:0; bottom:0; z-index:50;
+      transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .dash-sidebar__brand {
+      display:flex; align-items:center; gap:0.75rem;
+      padding:1.5rem 1.25rem 1rem;
+      border-bottom:1px solid var(--border);
+    }
+    .dash-sidebar__logo { width:38px; height:38px; border-radius:8px; }
+    .dash-sidebar__brand-name { font-weight:800; font-size:0.9375rem; color: var(--text-primary); line-height:1.2; }
+    .dash-sidebar__brand-sub { font-size:0.6875rem; color: var(--text-tertiary); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+
+    .dash-nav { flex:1; padding:1rem 0.75rem; display:flex; flex-direction:column; gap:0.25rem; }
+    .dash-nav__item {
+      display:flex; align-items:center; gap:0.75rem;
+      padding:0.75rem 1rem; border-radius:0.625rem;
+      color: var(--text-secondary); font-weight: 600; font-size:0.9rem;
+      background:none; border:none; cursor:pointer;
+      width:100%; text-align:left; font-family:inherit;
+      transition:all 0.2s;
+    }
+    .dash-nav__item:hover { background: var(--bg-muted); color: var(--text-primary); }
+    .dash-nav__item.is-active { background: var(--primary-subtle); color: var(--primary); }
+    .dash-nav__icon { font-size:1.125rem; }
+
+    .dash-sidebar__footer {
+      padding:1rem 0.75rem 1.5rem;
+      border-top:1px solid var(--border);
+      display:flex; flex-direction:column; gap:0.25rem;
+    }
+    .dash-sidebar__link {
+      display:block; padding:0.625rem 1rem;
+      color: var(--text-tertiary); font-size:0.8125rem; font-weight:500;
+      text-decoration:none; border-radius:0.5rem;
+      transition:all 0.2s;
+    }
+    .dash-sidebar__link:hover { color: var(--text-primary); background: var(--bg-muted); }
+
+    /* ── TOPBAR (mobile only) ──────────────── */
+    .dash-topbar {
+      display:none; position:fixed; top:0; left:0; right:0; height:56px;
+      background: var(--surface); z-index:49;
+      align-items:center; gap:0.75rem; padding:0 1rem;
+      border-bottom:1px solid var(--border);
+    }
+    .dash-topbar__menu {
+      background:none; border:none; color: var(--text-primary); font-size:1.5rem;
+      cursor:pointer; padding:0.25rem; line-height:1;
+    }
+    .dash-topbar__brand { display:flex; align-items:center; gap:0.5rem; color: var(--text-primary); font-weight:700; font-size:0.9375rem; }
+
+    /* ── MAIN CONTENT ──────────────────────── */
+    .dash-main {
+      flex:1; margin-left:240px;
+      padding:2rem; min-height:100vh;
+    }
+
+    .dash-header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; margin-bottom:2rem;
+    }
+    .dash-header__title { font-size:1.5rem; font-weight:800; color: var(--text-primary); letter-spacing:-0.02em; margin:0 0 0.25rem; }
+    .dash-header__sub { font-size:0.875rem; color: var(--text-secondary); margin:0; }
+
+    .dash-panel { display:none; }
+    .dash-panel.is-active { display:block; animation:panelIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+    @keyframes panelIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+    .dash-two-col {
+      display:grid; grid-template-columns:1fr;
+      gap:1.5rem; align-items:start;
+    }
+    @media (min-width:1100px) { .dash-two-col { grid-template-columns:420px 1fr; } }
+
+    /* ── CARDS ──────────────────────────────── */
+    .d-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius:1.25rem; padding:1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .d-card__header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
+    .d-card__icon { font-size:1.375rem; }
+    .d-card__title { font-size:1.0625rem; font-weight:800; color: var(--text-primary); margin:0; }
+
+    /* ── FORM ELEMENTS ──────────────────────── */
+    .d-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .d-field { display:flex; flex-direction:column; gap:0.375rem; }
+    .d-field.full { grid-column:1 / -1; }
+    .d-label { font-size:0.8125rem; font-weight:700; color: var(--text-secondary); }
+    .d-req { color:#ef4444; }
+    .d-input {
+      padding:0.625rem 0.875rem; border:1px solid var(--border);
+      border-radius:0.625rem; font-family:inherit; font-size:0.9rem;
+      color: var(--text-primary); background: var(--input-bg); outline:none; transition:all 0.2s;
+      width:100%; box-sizing:border-box;
+    }
+    .d-input:focus { border-color: var(--primary); box-shadow:0 0 0 3px var(--primary-subtle); }
+    textarea.d-input { resize:vertical; }
+    .d-file-input { display:none; }
+    .d-file-label {
+      display:block; border:2px dashed var(--border); border-radius:0.625rem;
+      padding:0.75rem 1rem; text-align:center; cursor:pointer;
+      color: var(--text-tertiary); font-size:0.875rem; font-weight:600;
+      transition:all 0.2s; background: var(--bg-muted);
+    }
+    .d-file-label:hover { border-color: var(--primary); background: var(--primary-subtle); color: var(--primary); }
+
+    /* ── BUTTONS ────────────────────────────── */
+    .d-btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:0.5rem; padding:0.625rem 1.25rem; border-radius:0.625rem;
+      font-family:inherit; font-size:0.875rem; font-weight:600;
+      cursor:pointer; border:none; text-decoration:none;
+      transition:all 0.2s; white-space:nowrap;
+    }
+    .d-btn--primary { background: var(--primary); color:white; box-shadow: var(--shadow-sm); }
+    .d-btn--primary:hover { background: var(--primary-light); transform:translateY(-1px); }
+    .d-btn--primary:disabled { opacity:0.6; transform:none; cursor:not-allowed; }
+    .d-btn--ghost { background: var(--bg-muted); color: var(--text-secondary); border:1px solid var(--border); }
+    .d-btn--ghost:hover { background: var(--bg-subtle); color: var(--text-primary); }
+    .d-btn--outline { background: var(--surface); color: var(--text-secondary); border:1px solid var(--border); }
+    .d-btn--outline:hover { border-color: var(--primary); color: var(--primary); }
+    .d-btn--danger { background: rgba(239, 68, 68, 0.1); color:#ef4444; }
+    .d-btn--danger:hover { background:#ef4444; color:white; }
+    .d-btn--sm { padding:0.375rem 0.75rem; font-size:0.8rem; }
+    .d-btn--full { width:100%; }
+
+    /* ── TABLE ──────────────────────────────── */
+    .d-table-wrap { overflow-x:auto; }
+    .d-table { width:100%; border-collapse:collapse; }
+    .d-table th {
+      background: var(--bg-subtle); padding:0.625rem 0.875rem;
+      font-size:0.6875rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.06em; color: var(--text-tertiary);
+      border-bottom:1px solid var(--border); text-align:left; white-space:nowrap;
+    }
+    .d-table td {
+      padding:0.875rem; border-bottom:1px solid var(--border);
+      font-size:0.875rem; vertical-align:middle; color: var(--text-primary);
+    }
+    .d-table tr:hover td { background: var(--bg-muted); }
+    .d-table tr:last-child td { border-bottom:none; }
+    .d-table__empty { text-align:center; padding:2rem; color: var(--text-tertiary); }
+
+    /* ── CAT BADGE ──────────────────────────── */
+    .d-badge {
+      display:inline-block; padding:0.25rem 0.6rem;
+      background:rgba(0,100,153,0.08); color:#006499;
+      font-size:0.6875rem; font-weight:700; border-radius:9999px;
+      white-space:nowrap;
+    }
+
+    /* ── MOBILE RESPONSIVE ──────────────────── */
+    @media (max-width:768px) {
+      .dash-sidebar {
+        transform:translateX(-100%);
+      }
+      .dash-sidebar.is-open {
+        transform:translateX(0);
+        box-shadow:8px 0 40px rgba(0,0,0,0.3);
+      }
+      .dash-topbar { display:flex; }
+      .dash-main { margin-left:0; padding:1rem; padding-top:calc(56px + 1rem); }
+      .d-form-grid { grid-template-columns:1fr; }
+    }
+
+    /* ── OVERLAY for mobile sidebar ─────────── */
+    .dash-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
+      z-index:48; backdrop-filter:blur(2px);
+    }
+    .dash-overlay.is-visible { display:block; }
+
+    /* ── PRELOADER ──────────────────────────── */
+    .preloader {
+      position:fixed; inset:0; z-index:100; background:white;
+      display:flex; align-items:center; justify-content:center;
+      transition:opacity 0.5s ease;
+    }
+    .preloader--hidden { opacity:0; pointer-events:none; }
+    .preloader__inner { position:relative; display:flex; align-items:center; justify-content:center; }
+    .preloader__logo { width:48px; height:48px; border-radius:8px; }
+    .preloader__ring {
+      position:absolute; border-radius:50%;
+      border:3px solid transparent; border-top-color:#006499;
+    }
+    .preloader__ring--outer { width:80px; height:80px; animation:spin 1.5s linear infinite; }
+    .preloader__ring--inner { width:56px; height:56px; animation:spin 1s linear infinite reverse; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── TOAST ──────────────────────────────── */
+    .toast-container {
+      position:fixed; bottom:1.5rem; right:1.5rem;
+      z-index:200; display:flex; flex-direction:column; gap:0.5rem;
+    }
+    .toast {
+      background:white; border:1px solid #e2e8f0;
+      box-shadow:0 8px 30px rgba(0,0,0,0.12);
+      border-radius:0.875rem; padding:0.875rem 1.25rem;
+      min-width:260px; font-size:0.875rem;
+      animation:toastIn 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes toastIn { from { opacity:0; transform:translateY(0.5rem) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+  </style>
+
+  <div class="dash-overlay" id="dash-overlay"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

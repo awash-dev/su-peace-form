@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Prevent indexing of the admin dashboard layout
+Disallow: /dashboard.html
+
+# Reference to the sitemap for automatic search engine detection
+Sitemap: https://su.greenafricafarm.com/sitemap.xml
