@@ -91,7 +91,10 @@ function initNavbar() {
       <div class="navbar__inner">
         <a href="/" class="navbar__brand">
           <img src="/logo.jpg" alt="Logo" width="40" height="40" style="border-radius:var(--r-lg)">
-          <span class="navbar__brand-text">Samara University Peace Forum Union</span>
+          <div class="navbar__brand-text">
+            <span class="brand-title">Peace Forum Union</span>
+            <span class="brand-sub">Samara University</span>
+          </div>
         </a>
         <nav class="navbar__links" aria-label="Primary navigation">
           ${links.map(l => `<a href="${l.href}" class="navbar__link${isActive(l.href) ? ' navbar__link--active' : ''}">${l.label}</a>`).join('')}
@@ -109,8 +112,9 @@ function initNavbar() {
       <div class="mobile-menu__inner">
         ${links.map(l => `<a href="${l.href}" class="mobile-menu__link">${l.label}</a>`).join('')}
         <div class="mobile-menu__divider"></div>
-        <button class="theme-toggle theme-toggle--mobile" id="theme-toggle-mobile" style="margin-bottom:1rem">
-          <span class="theme-label">Switch Theme</span>
+        <button class="theme-toggle theme-toggle--mobile" id="theme-toggle-mobile" aria-label="Toggle theme" style="margin-bottom:1rem">
+          <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
         <a href="https://t.me/SUPEACEFORUMUNION" target="_blank" rel="noopener noreferrer" class="mobile-menu__social-btn">🔵 Join Telegram</a>
       </div>
