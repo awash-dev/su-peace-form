@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/src/style.css" />
   <title>Admin Dashboard — Samara Peace Forum Union</title>
   <script>
     try {
@@ -17,6 +16,8 @@
       document.documentElement.setAttribute('data-theme', t);
     } catch(e) {}
   </script>
+  <script type="module" crossorigin src="/assets/main-Dne55LGc.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-ELywlkzf.css">
 </head>
 <body data-page="dashboard" style="margin:0;padding:0;font-family:'Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);overflow-x:hidden">
 
@@ -68,7 +69,7 @@
       <div class="dash-topbar__brand">
         <img src="/logo.jpg" alt="Logo" width="28" height="28" style="border-radius:6px">
         <div style="display:flex;flex-direction:column;gap:0">
-          <span style="font-weight:800;font-size:0.875rem;line-height:1">Peace Forum</span>
+          <span style="font-weight:800;font-size:0.875rem;line-height:1">Peace Forum Union</span>
           <span style="font-size:0.625rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.04em">Admin Panel</span>
         </div>
       </div>
@@ -439,10 +440,14 @@
       white-space:nowrap;
     }
 
-    /* ── MOBILE RESPONSIVE ──────────────────── */
-    @media (max-width:768px) {
+    .dash-sidebar__close { display: none; }
+    .dash-header__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── MOBILE/TABLET RESPONSIVE (< 1024px) ──────────────────── */
+    @media (max-width: 1023px) {
       .dash-sidebar {
         transform:translateX(-100%);
+        z-index: 50; 
       }
       .dash-sidebar.is-open {
         transform:translateX(0);
@@ -453,7 +458,8 @@
       .d-form-grid { grid-template-columns:1fr; }
       
       .dash-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
-      .dash-header__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; width: 100%; }
+      .dash-header__actions { display: grid; grid-template-columns: 1fr; gap: 0.5rem; width: 100%; }
+      @media (min-width: 600px) { .dash-header__actions { grid-template-columns: 1fr 1fr; } }
       .dash-header__actions .d-btn { width: 100%; font-size: 0.75rem; padding-inline: 0.5rem; }
       
       .dash-sidebar__close {
@@ -464,12 +470,12 @@
       }
     }
     
-    @media (max-width: 480px) {
-      .dash-header__actions { grid-template-columns: 1fr; }
+    @media (max-width: 580px) {
+      .dash-header__actions { display: flex; flex-direction: column; width: 100%; }
+      .dash-header__actions .d-btn { width: 100%; }
     }
     
-    .dash-sidebar__close { display: none; }
-    .dash-header__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
 
     /* ── OVERLAY for mobile sidebar ─────────── */
     .dash-overlay {
@@ -512,6 +518,5 @@
 
   <div class="dash-overlay" id="dash-overlay"></div>
 
-  <script type="module" src="/src/main.js"></script>
 </body>
 </html>

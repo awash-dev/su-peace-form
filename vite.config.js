@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [
+    react(),
     tailwindcss(),
   ],
   resolve: {
@@ -12,13 +14,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main:      resolve(__dirname, 'index.html'),
-        mission:   resolve(__dirname, 'mission.html'),
-        resources: resolve(__dirname, 'resources.html'),
-        unions:    resolve(__dirname, 'unions.html'),
-        news:      resolve(__dirname, 'news.html'),
-        contact:   resolve(__dirname, 'contact.html'),
-        dashboard: resolve(__dirname, 'dashboard.html'),
+        main: resolve(__dirname, 'index.html'),
       },
     },
   },

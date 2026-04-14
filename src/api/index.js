@@ -3,7 +3,7 @@
  * All backend communication goes through this module
  */
 
-const API_BASE = 'https://su-peace-form-backend.vercel.app'; // Live Vercel Production Environment backend url
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000'; // Development / Live fallback
 
 /** @type {Map<string, {data: any, ts: number}>} */
 const cache = new Map();
